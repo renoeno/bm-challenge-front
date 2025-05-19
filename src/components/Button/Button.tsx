@@ -9,7 +9,7 @@ const buttonVariants = cva(
       variant: {
         primary: "bg-custom-main-green text-white",
         secondary: "border border-custom-tertiary-gray bg-white text-custom-tertiary-gray",
-        outline: "border-2 border-custom-main-green text-custom-main-green",
+        outline: "border border-custom-main-gray text-custom-dark-gray",
         ghost: "hover:bg-gray-100 text-gray-900",
       },
       size: {
