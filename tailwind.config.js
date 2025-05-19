@@ -25,6 +25,7 @@ module.exports = {
           hover: "#F7F7F7",
           "main-gray": "#B3B3C1",
           "auxiliar-gray": "#F0F1F5",
+          "tertiary-gray": "#45474F",
           "dark-gray": "#344054",
           "main-yellow": "#EA7C2D",
         },

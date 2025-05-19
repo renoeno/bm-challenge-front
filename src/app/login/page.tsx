@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Logo } from '@/components/common/Logo';
 import Image from 'next/image';
+import Button from '@/components/Button/Button';
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>('');
@@ -85,20 +86,23 @@ export default function LoginPage() {
                     </div>
 
                     <div className='flex flex-col gap-4 items-center'>
-                        <button
+                        <Button
                         type="submit"
                             disabled={loading || email === '' || password === '' }
-                        className="group relative flex w-full justify-center rounded-md bg-custom-main-green py-2 px-3 text-sm font-semibold text-white hover:bg-custom-auxiliar-green disabled:bg-gray-200"
+                        variant='primary'
+                        size='sm border-[#D0D5DD]'
+                        className='w-full '
                         >
                         {loading ? 'Logando...' : 'Entrar'}
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
                             disabled={loading}
-                            className="group relative w-fit flex justify-center rounded-md border border-solid border-custom-main-gray bg-white py-1 px-6 text-[12px] text-custom-main-gray hover:bg-gray-100 disabled:bg-gray-200 disabled:border-none"
-                        >
+                            variant='secondary'
+                            size='sm'
+                            className=" w-fit  border-[#D0D5DD]" >
                             Esqueci minha senha
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>
