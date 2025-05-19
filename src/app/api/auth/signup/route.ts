@@ -1,47 +1,49 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-interface LoginRequestBody {
-  email: string;
-  password: string;
+interface SignupRequestBody {
+    name: string;
+    email: string;
+    password: string;
 }
 
-interface LoginApiResponse {
-  email: string;
-  accessToken: string;
-  refreshToken: string;
+interface SignupApiResponse {
+    email: string;
+    accessToken: string;
+    refreshToken: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body: LoginRequestBody = await request.json();
+    const body: SignupRequestBody = await request.json();
     const cookieStore = await cookies()
     
-    if (!body.email || !body.password) {
+    if (!body.email || !body.name || !body.password) {
       return NextResponse.json(
-        { message: 'Email and password are required' },
+        { message: 'Email, name and password are required' },
         { status: 400 }
       );
     }
 
     const API_URL = 'http://localhost:3005'
     
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: body.email, password: body.password }),
+      body: JSON.stringify({ email: body.email, name: body.name, password: body.password }),
     });
     
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
       return NextResponse.json(
-        { message: 'Invalid credentials' },
-        { status: 401 }
+        { message: errorData.message || 'Invalid credentials' },
+        { status: response.status }
       );
     }
-    
-    const data: LoginApiResponse = await response.json();
+
+    const data: SignupApiResponse = await response.json();
     
     cookieStore.set('refreshToken', data.refreshToken, {
       httpOnly: true,
@@ -60,9 +62,9 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Signup error:', error);
     return NextResponse.json(
-      { message: 'Authentication failed' },
+      { message: 'An error occurred during signup' },
       { status: 500 }
     );
   }

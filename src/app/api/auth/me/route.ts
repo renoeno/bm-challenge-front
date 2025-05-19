@@ -5,7 +5,6 @@ interface UserData {
   id: string;
   name: string;
   email: string;
-  bio?: string;
   [key: string]: any; 
 }
 

@@ -8,20 +8,21 @@ import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const [formError, setFormError] = useState<string>('');
-  const { login, error, loading } = useAuth();
+  const { signup, error, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get('redirect') || '/dashboard';
+  const redirectPath = searchParams.get('redirect') || '/';
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormError('');
     
     try {
-      await login({ email, password });
+      await signup({ name, email, password });
       router.push(redirectPath); // Redirect after successful login
     } catch (err) {
       if (err instanceof Error) {
@@ -55,6 +56,21 @@ export default function LoginPage() {
                     <div className="rounded-md shadow-sm flex flex-col gap-4">
                         <div>
                             <label htmlFor="email-address" className='text-sm text-custom-dark-gray' >
+                                Nome
+                            </label>
+                            <input
+                                id="name"
+                                name="name"
+                                type="text"
+                                autoComplete="name"
+                                required
+                                className="w-[276px] relative block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-[#AEB0B3B2]  focus:ring-indigo-600"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="email-address" className='text-sm text-custom-dark-gray' >
                                 Email
                             </label>
                             <input
@@ -67,7 +83,7 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            </div>
+                        </div>
                         <div>
                             <label htmlFor="password"  className='text-sm text-custom-dark-gray' >
                                 Senha
@@ -90,7 +106,7 @@ export default function LoginPage() {
                             <input
                                 id="password-confirmation"
                                 name="password-confirmation"
-                                type="password-confirmation"
+                                type="password"
                                 autoComplete="current-password-confirmation"
                                 required
                                 className="w-[276px] relative block  rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-[#AEB0B3B2]  focus:ring-indigo-600"
@@ -103,14 +119,14 @@ export default function LoginPage() {
                     <div className='flex flex-col gap-4 items-center'>
                         <button
                         type="submit"
-                        disabled={loading}
+                        disabled={loading || email === '' || password === '' || passwordConfirmation === '' || name === ''}
                         className="group relative flex w-full justify-center rounded-md bg-custom-main-green py-2 px-3 text-sm font-semibold text-white hover:bg-custom-auxiliar-green disabled:bg-gray-200"
                         >
                         {loading ? 'Logando...' : 'Entrar'}
                         </button>
 
                         <button
-                            disabled={loading}
+                            disabled={loading }
                             className="group relative w-fit flex justify-center rounded-md border border-solid border-custom-main-gray bg-white py-1 px-6 text-[12px] text-custom-main-gray hover:bg-gray-100 disabled:bg-gray-200 disabled:border-none"
                         >
                             Esqueci minha senha

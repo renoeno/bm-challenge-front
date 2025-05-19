@@ -13,7 +13,7 @@ export default function LoginPage() {
   const { login, error, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get('redirect') || '/dashboard';
+  const redirectPath = searchParams.get('redirect') || '/';
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,7 +87,7 @@ export default function LoginPage() {
                     <div className='flex flex-col gap-4 items-center'>
                         <button
                         type="submit"
-                        disabled={loading}
+                            disabled={loading || email === '' || password === '' }
                         className="group relative flex w-full justify-center rounded-md bg-custom-main-green py-2 px-3 text-sm font-semibold text-white hover:bg-custom-auxiliar-green disabled:bg-gray-200"
                         >
                         {loading ? 'Logando...' : 'Entrar'}
