@@ -1,12 +1,23 @@
-import type { Metadata } from "next";
+
+'use client'
 import "./globals.css";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Provider } from "@/components/ui/provider";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { usePathname } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Book Shop",
-  description: "Greatest Book Shop Ever",
-};
+function NavbarWrapper() {
+  "use client";
+  
+  const pathname = usePathname();
+  const noNavbarRoutes = ["/login", "/signup", "/account"];
+  
+  if (noNavbarRoutes.includes(pathname)) {
+    return null;
+  }
+  
+  return <Navbar />;
+}
 
 export default function RootLayout({
   children,
@@ -16,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className=" bg-custom-auxiliar-gray flex font-dm-sans">
-        <Provider>
-          <Navbar /> {children}
-        </Provider>
+        <AuthProvider>
+          <Provider>
+            <NavbarWrapper /> {children}
+          </Provider>
+        </AuthProvider>
       </body>
     </html>
   );
