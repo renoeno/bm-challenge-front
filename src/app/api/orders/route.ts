@@ -1,4 +1,6 @@
 import { Item, Order } from "@/types/types";
+import { authenticatedFetch } from "@/utils/api";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server"
 
 interface CreateOrderRequestBody {
@@ -10,7 +12,7 @@ const API_URL = 'http://localhost:3005'
 export async function GET(request: NextRequest) {
     try {
     
-        const response = await fetch(`${API_URL}/api/v1/orders`);
+        const response = await authenticatedFetch(`${API_URL}/api/v1/orders`);
 
         if (!response.ok) {
             return NextResponse.json(
@@ -42,7 +44,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const response = await fetch(`${API_URL}/api/v1/orders`, {
+        const response = await authenticatedFetch(`${API_URL}/api/v1/orders`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

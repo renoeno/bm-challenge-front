@@ -10,6 +10,7 @@ interface LoginApiResponse {
   email: string;
   accessToken: string;
   refreshToken: string;
+  role: 'ADMIN' | 'USER';
 }
 
 export async function POST(request: NextRequest) {
@@ -51,7 +52,8 @@ export async function POST(request: NextRequest) {
     });
     
     return NextResponse.json(
-      { email: data.email, accessToken: data.accessToken },
+      { email: data.email, accessToken: data.accessToken,
+        role: data.role },
       { 
         status: 201,
         headers: {

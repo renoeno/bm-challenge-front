@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('auth-token')?.value;
+    const token = cookieStore.get('refreshToken')?.value;
     
     if (!token) {
       return NextResponse.json(

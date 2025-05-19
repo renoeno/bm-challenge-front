@@ -7,6 +7,8 @@ interface User {
   id: string;
   name: string;
   email: string;
+  role: 'ADMIN' | 'USER';
+  accessToken?: string;
 }
 
 interface SignupCredentials {
@@ -30,6 +32,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<User>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
+  isAdmin: boolean; 
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -93,7 +96,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
       
       const userData: User = await response.json();
-      setUser(userData);
+      const accessToken = response.headers.get('Authorization')?.split(' ')[1];
+      
+      setUser({
+        ...userData,
+        accessToken
+      });
       router.refresh(); 
       return userData;
     } catch (err) {
@@ -127,7 +135,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
       
       const userData: User = await response.json();
-      setUser(userData);
+      const accessToken = response.headers.get('Authorization')?.split(' ')[1];
+      
+      setUser({
+        ...userData,
+        accessToken
+      });
       router.refresh(); 
       return userData;
     } catch (err) {
@@ -163,6 +176,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     login,
     logout,
     isAuthenticated: !!user,
+    isAdmin: user?.role === 'ADMIN', 
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

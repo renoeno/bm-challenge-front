@@ -1,4 +1,6 @@
 import { Book } from "@/types/types";
+import { authenticatedFetch } from "@/utils/api";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server"
 
 interface CreateBookRequestBody {
@@ -15,7 +17,7 @@ const API_URL = 'http://localhost:3005'
 
 export async function GET(request: NextRequest) {
     try {
-    
+        
         const response = await fetch(`${API_URL}/api/v1/books`);
 
         if (!response.ok) {
