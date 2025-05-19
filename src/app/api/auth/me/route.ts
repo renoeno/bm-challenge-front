@@ -1,12 +1,7 @@
+import { User } from '@/types/types';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-interface UserData {
-  id: string;
-  name: string;
-  email: string;
-  [key: string]: any; 
-}
 
 export async function GET(request: NextRequest) {
   try {
@@ -33,7 +28,7 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const userData: UserData = await response.json();
+    const userData: User = await response.json();
     
     return NextResponse.json({
       id: userData.id,
