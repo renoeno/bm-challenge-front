@@ -90,7 +90,7 @@ export default function LoginPage() {
                         type="submit"
                             disabled={loading || email === '' || password === '' }
                         variant='primary'
-                        size='sm border-[#D0D5DD]'
+                        size='sm'
                         className='w-full '
                         >
                         {loading ? 'Logando...' : 'Entrar'}
