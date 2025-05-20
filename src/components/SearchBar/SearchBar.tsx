@@ -15,13 +15,13 @@ export default function SearchBar({ initialQuery = '' }: SearchBarProps) {
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (query.trim() !== '') {
       const params = new URLSearchParams(window.location.search);
       params.set('query', query);
-      
+
       router.push(`${pathname}?${params.toString()}`);
-    } 
+    }
   };
 
   const handleChangeQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +32,7 @@ export default function SearchBar({ initialQuery = '' }: SearchBarProps) {
       router.push(`${pathname}?${params.toString()}`);
     }
     setQuery(e.target.value);
-  }
+  };
 
   return (
     <form onSubmit={handleSearch} className="relative">
@@ -50,7 +50,9 @@ export default function SearchBar({ initialQuery = '' }: SearchBarProps) {
       >
         <Search />
       </div>
-      <button type="submit" className="hidden">Search</button>
+      <button type="submit" className="hidden">
+        Search
+      </button>
     </form>
   );
 }

@@ -39,7 +39,6 @@ export default async function Home({
     query: searchQuery || undefined,
   });
 
-
   return (
     <div className="min-h-screen px-8 py-5 w-full">
       <div className="flex items-center justify-between mb-4">
@@ -54,18 +53,22 @@ export default async function Home({
         </div>
         <Filter />
       </div>
-      { !searchQuery ? <div className="mt-6 ">
-        {selectedCategory && selectedCategory !== 'Todos' ? (
-          <CategoryHero category={selectedCategory} />
-        ) : (
-          <div className="w-full bg-custom-tertiary-gray rounded-full h-[296px]"></div>
-        )}
-      </div> : null}
-      <div className={searchQuery ? "mt-8" :"mt-5"}>
-        {!searchQuery ?<CategoryFilter
-          categories={allCategories}
-          selectedCategory={selectedCategory}
-        /> : null}
+      {!searchQuery ? (
+        <div className="mt-6 ">
+          {selectedCategory && selectedCategory !== 'Todos' ? (
+            <CategoryHero category={selectedCategory} />
+          ) : (
+            <div className="w-full bg-custom-tertiary-gray rounded-full h-[296px]"></div>
+          )}
+        </div>
+      ) : null}
+      <div className={searchQuery ? 'mt-8' : 'mt-5'}>
+        {!searchQuery ? (
+          <CategoryFilter
+            categories={allCategories}
+            selectedCategory={selectedCategory}
+          />
+        ) : null}
       </div>
       <div className="mt-4">
         <div className="flex flex-wrap gap-4">
