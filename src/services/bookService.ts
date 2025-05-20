@@ -31,7 +31,7 @@ export const bookService = {
     return response.json();
   },
 
-  async getBookById(id: number): Promise<Book> {
+  async getBookById(id: number): Promise<{success: boolean, book: Book}> {
     const response = await fetch(`${API_URL}/api/v1/books/${id}`);
 
     if (!response.ok) {
