@@ -1,11 +1,14 @@
 import { useAuth } from '@/contexts/AuthContext';
 
-export const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
+export const authenticatedFetch = async (
+  url: string,
+  options: RequestInit = {},
+) => {
   const { user } = useAuth();
-  
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(user?.accessToken && { 'Authorization': `Bearer ${user.accessToken}` }),
+    ...(user?.accessToken && { Authorization: `Bearer ${user.accessToken}` }),
     ...options.headers,
   };
 

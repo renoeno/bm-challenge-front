@@ -1,5 +1,5 @@
 'use client';
-import AdminRoute from "@/components/AdminRoute/AdminRoute";
+import AdminRoute from '@/components/AdminRoute/AdminRoute';
 
 export default function CreateBookPage() {
   return (

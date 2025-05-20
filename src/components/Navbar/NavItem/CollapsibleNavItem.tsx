@@ -1,18 +1,24 @@
-import { Accordion, Span } from "@chakra-ui/react";
+import { Accordion, Span } from '@chakra-ui/react';
+
+interface CollapsableNavItemProps {
+  icon: React.ReactNode;
+  text: string;
+  selectedCategory: string;
+  disabled: boolean;
+  navChildren: string[];
+  onClick?: (category: string) => void;
+}
 
 export const CollapsbleNavItem = ({
   icon,
   text,
-  isActive,
+  selectedCategory,
+  disabled,
   navChildren,
-}: {
-  icon: React.ReactNode;
-  text: string;
-  isActive: boolean;
-  navChildren: string[];
-}) => {
+  onClick,
+}: CollapsableNavItemProps) => {
   return (
-    <Accordion.Root collapsible defaultValue={["b"]}>
+    <Accordion.Root collapsible defaultValue={['b']}>
       <Accordion.Item value={text}>
         <Accordion.ItemTrigger className="flex items-center gap-2 p-4 rounded-lg cursor-pointer group hover:bg-custom-hover">
           <span className="text-[12px]">{icon}</span>
@@ -25,9 +31,12 @@ export const CollapsbleNavItem = ({
           {navChildren.map((child, index) => (
             <Accordion.ItemBody
               key={index}
-              className="flex items-center gap-2 p-2 ml-8 mr-3 rounded-lg cursor-pointer group hover:bg-custom-hover"
+              className={`flex items-center gap-2 p-2 ml-8 mr-3 rounded-lg  group  ${disabled ? 'pointer-events-none' : 'cursor-pointer hover:bg-custom-hover'} ${selectedCategory === child ? 'bg-custom-hover' : ''}`}
+              onClick={() => onClick && onClick(child)}
             >
-              <span className="text-[14px]  group-hover:text-custom-main-yellow">
+              <span
+                className={`"text-[14px]  group-hover:text-custom-main-yellow" ${selectedCategory === child ? 'text-custom-main-yellow' : ''}`}
+              >
                 {child}
               </span>
             </Accordion.ItemBody>

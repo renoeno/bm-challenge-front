@@ -9,7 +9,8 @@ export function useBooks(initialParams: BookSearchParams = {}) {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [searchParams, setSearchParams] = useState<BookSearchParams>(initialParams);
+  const [searchParams, setSearchParams] =
+    useState<BookSearchParams>(initialParams);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -29,7 +30,7 @@ export function useBooks(initialParams: BookSearchParams = {}) {
   }, [searchParams]);
 
   const updateSearchParams = (newParams: Partial<BookSearchParams>) => {
-    setSearchParams(prev => ({ ...prev, ...newParams }));
+    setSearchParams((prev) => ({ ...prev, ...newParams }));
   };
 
   const searchBooks = (query: string) => {
@@ -40,7 +41,10 @@ export function useBooks(initialParams: BookSearchParams = {}) {
     updateSearchParams({ category, page: 1 });
   };
 
-  const sortBooks = (sortBy: 'title' | 'price' | 'author', sortOrder: 'asc' | 'desc') => {
+  const sortBooks = (
+    sortBy: 'title' | 'price' | 'author',
+    sortOrder: 'asc' | 'desc',
+  ) => {
     updateSearchParams({ sortBy, sortOrder });
   };
 

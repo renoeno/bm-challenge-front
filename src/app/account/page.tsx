@@ -22,7 +22,7 @@ export default function ProfilePage() {
     if (user) {
       setFormData({
         name: user.name || '',
-        email: user.email || ''
+        email: user.email || '',
       });
     }
   }, [user]);
@@ -42,7 +42,9 @@ export default function ProfilePage() {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <p className="text-gray-600">You need to be logged in to view this page.</p>
+          <p className="text-gray-600">
+            You need to be logged in to view this page.
+          </p>
         </div>
       </div>
     );
@@ -59,15 +61,12 @@ export default function ProfilePage() {
             Your personal information
           </p>
         </div>
-        
+
         {updateError && (
           <div className="rounded-md bg-red-50 p-4 mx-6">
-            <div className="text-sm text-red-700">
-              {updateError}
-            </div>
+            <div className="text-sm text-red-700">{updateError}</div>
           </div>
         )}
-        
       </div>
     </div>
   );

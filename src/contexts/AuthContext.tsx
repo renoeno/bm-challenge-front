@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from 'react';
 import { useRouter } from 'next/navigation';
 
 interface User {
@@ -32,7 +38,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<User>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
-  isAdmin: boolean; 
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -72,7 +78,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     checkLoggedIn();
   }, []); */
 
-
   const signup = async (credentials: {
     name: string;
     email: string;
@@ -80,7 +85,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }): Promise<User> => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -89,20 +94,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         },
         body: JSON.stringify(credentials),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Signup failed');
       }
-      
+
       const userData: User = await response.json();
       const accessToken = response.headers.get('Authorization')?.split(' ')[1];
-      
+
       setUser({
         ...userData,
-        accessToken
+        accessToken,
       });
-      router.refresh(); 
+      router.refresh();
       return userData;
     } catch (err) {
       if (err instanceof Error) {
@@ -119,7 +124,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = async (credentials: LoginCredentials): Promise<User> => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -128,20 +133,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         },
         body: JSON.stringify(credentials),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Login failed');
       }
-      
+
       const userData: User = await response.json();
       const accessToken = response.headers.get('Authorization')?.split(' ')[1];
-      
+
       setUser({
         ...userData,
-        accessToken
+        accessToken,
       });
-      router.refresh(); 
+      router.refresh();
       return userData;
     } catch (err) {
       if (err instanceof Error) {
@@ -161,8 +166,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         method: 'POST',
       });
       setUser(null);
-      router.refresh(); 
-      router.push('/'); 
+      router.refresh();
+      router.push('/');
     } catch (err) {
       console.error('Logout error:', err);
     }
@@ -176,7 +181,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     login,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN', 
+    isAdmin: user?.role === 'ADMIN',
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
