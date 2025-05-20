@@ -28,6 +28,7 @@ module.exports = {
           "tertiary-gray": "#45474F",
           "dark-gray": "#344054",
           "main-yellow": "#EA7C2D",
+          "text": "#11131A"
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

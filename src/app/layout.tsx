@@ -1,7 +1,7 @@
 
 'use client'
 import "./globals.css";
-import { Navbar } from "@/components/Navbar/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 import { Provider } from "@/components/ui/provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { usePathname } from "next/navigation";
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className=" bg-custom-auxiliar-gray flex font-dm-sans">
+      <body className=" bg-[#F6F7F9] flex font-dm-sans">
         <AuthProvider>
           <Provider>
             <NavbarWrapper /> {children}

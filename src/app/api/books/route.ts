@@ -7,7 +7,7 @@ interface CreateBookRequestBody {
     title: string;
     author: string;
     description: string;
-    category: string;
+    category: string[];
     price: string;
     image?: string;
     stock: number;

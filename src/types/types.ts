@@ -12,17 +12,25 @@ export interface Order {
     updatedAt?: Date;
     userId: number;
 }
-  
 
 export interface Book {
     id: number;
     title: string;
     author: string;
     description: string;
-    category: string;
+    category: string[];
     stock: number;
     price: string;
     image: string;
+}
+
+export interface BookSearchParams {
+  query?: string;
+  category?: string;
+  sortBy?: 'title' | 'price' | 'author';
+  sortOrder?: 'asc' | 'desc';
+  page?: number;
+  limit?: number;
 }
 
 export interface User {
