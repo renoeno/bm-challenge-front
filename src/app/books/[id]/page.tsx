@@ -1,11 +1,6 @@
 import BookActions from '@/components/Book/BookActions';
-import Button from '@/components/Button/Button';
-import Quantity from '@/components/Quantity/Quantity';
-import BookColors from '@/components/Variants/BookColors';
-import { BookVariants } from '@/components/Variants/BookVariants';
 import { bookService } from '@/services/bookService';
 import { Breadcrumb } from '@chakra-ui/react';
-import { ArrowRight, MessageCircle, ShoppingBag } from 'feather-icons-react';
 
 interface BookPageProps {
   id: string;
@@ -58,7 +53,7 @@ export default async function BookPage({ params }: { params: BookPageProps }) {
         <div className="w-[473px] h-[584px] rounded-[12px] bg-custom-main-gray book.price flex-1"></div>
         <div className="flex-1 min-w-0">
           <p className="text-custom-text text-[38px] font-bold">
-            {book.title}, {book.author}
+            {book.title}, <span className="uppercase">{book.author}</span>
           </p>
           <p className="text-custom-main-green text-[24px] font-bold">
             R${book.variants[0].price}

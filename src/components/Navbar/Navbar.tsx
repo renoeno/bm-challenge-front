@@ -8,6 +8,8 @@ import { CollapsbleNavItem } from './NavItem/CollapsibleNavItem';
 import { useEffect, useState } from 'react';
 import { bookService } from '@/services/bookService';
 import { useRouter, usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import UserLink from './UserLink';
 
 export default function Navbar() {
   const [categories, setCategories] = useState<string[]>([]);
@@ -49,37 +51,45 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-[244px] bg-white flex flex-col">
-      <div className="p-4 pb-3">
-        <Logo />
+    <nav className="w-[244px] bg-white flex flex-col fixed top-0 left-0 h-screen overflow-hidden">
+      <div className="flex flex-col justify-between h-full overflow-y-auto">
+        <div>
+          <div className="p-4 pb-3 sticky top-0 bg-white z-10">
+            <Logo />
+          </div>
+          <hr />
+          <div className="overflow-y-auto">
+            <NavItem
+              isActive={selectedCategory === 'Início'}
+              onClick={() => handleRedirect('/')}
+              icon={<Home width="16px" />}
+              text="Início"
+            />
+            <NavItem
+              isActive={selectedCategory === 'Notificações'}
+              onClick={() => handleRedirect('/notifications')}
+              icon={<Bell width="16px" />}
+              text="Notificações"
+            />
+            <CollapsbleNavItem
+              selectedCategory={selectedCategory}
+              icon={<Book width="16px" />}
+              text="Todos Livros"
+              navChildren={categories}
+              disabled={loading}
+              onClick={(category) => handleCategoryClick(category)}
+            />
+            <NavItem
+              isActive={selectedCategory === 'Configurações'}
+              onClick={() => handleRedirect('/settings')}
+              icon={<Settings width="16px" />}
+              text="Configurações"
+            />
+          </div>
+        </div>
+        <hr />
+        <UserLink />
       </div>
-      <hr />
-      <NavItem
-        isActive={selectedCategory === 'Início'}
-        onClick={() => handleRedirect('/')}
-        icon={<Home width="16px" />}
-        text="Início"
-      />
-      <NavItem
-        isActive={selectedCategory === 'Notificações'}
-        onClick={() => handleRedirect('/notifications')}
-        icon={<Bell width="16px" />}
-        text="Notificações"
-      />
-      <CollapsbleNavItem
-        selectedCategory={selectedCategory}
-        icon={<Book width="16px" />}
-        text="Todos Livros"
-        navChildren={categories}
-        disabled={loading}
-        onClick={(category) => handleCategoryClick(category)}
-      />
-      <NavItem
-        isActive={selectedCategory === 'Configurações'}
-        onClick={() => handleRedirect('/settings')}
-        icon={<Settings width="16px" />}
-        text="Configurações"
-      />
     </nav>
   );
 }

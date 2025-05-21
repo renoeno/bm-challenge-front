@@ -6,23 +6,59 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Logo } from '@/components/common/Logo';
 import Image from 'next/image';
 import Button from '@/components/Button/Button';
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  email: z.string().min(1, 'Email é obrigatório').email('Email inválido'),
+  password: z.string().min(1, 'Senha é obrigatória'),
+});
+
+type FormErrors = {
+  email?: string;
+  password?: string;
+};
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [formError, setFormError] = useState<string>('');
+  const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
   const { login, error, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/';
 
+  const validateForm = () => {
+    try {
+      loginSchema.parse({ email, password });
+      setFieldErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const errors: FormErrors = {};
+        error.errors.forEach((err) => {
+          const path = err.path[0] as 'email' | 'password';
+          errors[path] = err.message;
+        });
+        setFieldErrors(errors);
+
+        setFormError(error.errors[0].message);
+      }
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormError('');
 
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       await login({ email, password });
-      router.push(redirectPath); // Redirect after successful login
+      router.push(redirectPath);
     } catch (err) {
       if (err instanceof Error) {
         setFormError(err.message);
@@ -66,10 +102,19 @@ export default function LoginPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="w-[276px] relative block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-[#AEB0B3B2]  focus:ring-indigo-600"
+                  className={`w-[276px] relative block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ${
+                    fieldErrors.email
+                      ? 'ring-red-500 focus:ring-red-500'
+                      : 'ring-[#AEB0B3B2] focus:ring-indigo-600'
+                  }`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                {fieldErrors.email && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {fieldErrors.email}
+                  </p>
+                )}
               </div>
               <div>
                 <label
@@ -84,10 +129,19 @@ export default function LoginPage() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="w-[276px] relative block  rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-[#AEB0B3B2]  focus:ring-indigo-600"
+                  className={`w-[276px] relative block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ${
+                    fieldErrors.password
+                      ? 'ring-red-500 focus:ring-red-500'
+                      : 'ring-[#AEB0B3B2] focus:ring-indigo-600'
+                  }`}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                {fieldErrors.password && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {fieldErrors.password}
+                  </p>
+                )}
               </div>
             </div>
 

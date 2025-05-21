@@ -9,6 +9,7 @@ interface AddBookButtonProps {
   book: {
     id: number;
     title: string;
+    author: string;
     variants: {
       id: number;
       variant: string;
@@ -40,7 +41,9 @@ export default function AddBookButton({
       id: book.id,
       title: book.title,
       variant: variant.variant,
-      price: parseFloat(variant.price),
+      price: variant.price,
+      stock: variant.stock,
+      author: book.author,
       quantity: quantity,
       image: book.image,
     });

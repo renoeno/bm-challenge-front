@@ -7,17 +7,20 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { CartProvider } from '@/contexts/CartContext';
 import { usePathname } from 'next/navigation';
 
-function NavbarWrapper() {
-  'use client';
-
+function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const noNavbarRoutes = ['/login', '/signup', '/account'];
+  const noNavbarRoutes = ['/login', '/signup', '/account', '/books/create'];
+  const showNavbar = !noNavbarRoutes.includes(pathname);
 
-  if (noNavbarRoutes.includes(pathname)) {
-    return null;
-  }
-
-  return <Navbar />;
+  return (
+    <>
+      {showNavbar && <Navbar />}
+      <main className={`flex-grow ${showNavbar ? 'ml-[244px]' : ''}`}>
+        {children}
+      </main>
+      {showNavbar && <CartButton />}
+    </>
+  );
 }
 
 export default function RootLayout({
@@ -31,8 +34,7 @@ export default function RootLayout({
         <AuthProvider>
           <Provider>
             <CartProvider>
-              <NavbarWrapper /> {children}
-              <CartButton />
+              <MainLayout>{children}</MainLayout>
             </CartProvider>
           </Provider>
         </AuthProvider>

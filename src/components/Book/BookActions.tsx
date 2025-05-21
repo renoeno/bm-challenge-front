@@ -2,7 +2,7 @@
 
 import { AggregatedBook, Variant } from '@/types/types';
 import Button from '../Button/Button';
-import { ShoppingBag, MessageCircle, ArrowRight } from 'feather-icons-react';
+import { MessageCircle, ArrowRight } from 'feather-icons-react';
 import Quantity from '../Quantity/Quantity';
 import BookColors from '../Variants/BookColors';
 import { BookVariants } from '../Variants/BookVariants';
@@ -37,11 +37,17 @@ export default function BookActions({ book }: { book: AggregatedBook }) {
         <BookColors />
       </div>
       <div className="mt-8">
-        <Quantity
-          stock={selectedVariant.stock}
-          quantity={quantity}
-          handleUpdateQuantity={handleUpdateQuantity}
-        />
+        <p className="font-bold text-[17px]">Quantidade</p>
+        <p className="text-[16px] mt-2">
+          ⚠️ Para este produto quantidade mínima é:
+        </p>
+        <div className="mt-5">
+          <Quantity
+            stock={selectedVariant.stock}
+            quantity={quantity}
+            handleUpdateQuantity={handleUpdateQuantity}
+          />
+        </div>
       </div>
       <div className="mt-10">
         <AddBookButton

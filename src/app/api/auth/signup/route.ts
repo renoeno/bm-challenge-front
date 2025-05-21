@@ -9,6 +9,7 @@ interface SignupRequestBody {
 
 interface SignupApiResponse {
   email: string;
+  role: string;
   accessToken: string;
   refreshToken: string;
 }
@@ -57,7 +58,12 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { email: data.email, accessToken: data.accessToken },
+      {
+        email: data.email,
+        name: data.email,
+        role: data.role,
+        accessToken: data.accessToken,
+      },
       {
         status: 201,
         headers: {

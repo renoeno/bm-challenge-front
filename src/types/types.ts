@@ -3,11 +3,27 @@ export interface Item {
   quantity: number;
 }
 
+export interface CreateBookRequestBody {
+  title: string;
+  author: string;
+  description: string;
+  category: string[];
+  price: string;
+  image?: string;
+  stock: number;
+}
+
+export interface CreateOrderRequestBody {
+  itens: Item[];
+  total: string;
+}
 export interface CartItem {
   id: number;
   title: string;
+  author: string;
+  stock: number;
   variant: string;
-  price: number;
+  price: string;
   quantity: number;
   image?: string;
 }

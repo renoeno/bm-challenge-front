@@ -1,4 +1,10 @@
-import { AggregatedBook, Book, BookSearchParams } from '@/types/types';
+import {
+  AggregatedBook,
+  Book,
+  BookSearchParams,
+  CreateBookRequestBody,
+} from '@/types/types';
+import { adminFetch, authenticatedFetch } from '@/utils/api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
 
@@ -75,12 +81,39 @@ export const bookService = {
     id: number,
   ): Promise<{ success: boolean; book: AggregatedBook }> {
     const response = await fetch(`${API_URL}/api/v1/books/aggregated/${id}`);
-    console.log(`${API_URL}/api/v1/books/aggregated/${id}`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch aggregated book');
     }
 
     return response.json();
+  },
+
+  async createBook(
+    bookData: CreateBookRequestBody,
+  ): Promise<{ success: boolean; book: Book }> {
+    try {
+      const response = await adminFetch(`${API_URL}/api/v1/books`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookData),
+        cache: 'no-store',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `Failed to create book: ${response.status}`,
+        );
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error creating book:', error);
+      throw error;
+    }
   },
 };
