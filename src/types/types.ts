@@ -24,6 +24,23 @@ export interface Book {
   image: string;
 }
 
+export interface AggregatedBook {
+  id: number;
+  title: string;
+  description: string;
+  category: string[];
+  image: string;
+  author: string;
+  variants: Variant[];
+}
+
+export interface Variant {
+  id: number;
+  variant: string;
+  price: string;
+  stock: number;
+}
+
 export interface BookSearchParams {
   query?: string;
   category?: string;

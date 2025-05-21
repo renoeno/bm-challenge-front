@@ -1,4 +1,4 @@
-import { Book, BookSearchParams } from '@/types/types';
+import { AggregatedBook, Book, BookSearchParams } from '@/types/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
 
@@ -36,6 +36,45 @@ export const bookService = {
 
     if (!response.ok) {
       throw new Error('Failed to fetch book');
+    }
+
+    return response.json();
+  },
+
+  async getAggregatedBooks(params: BookSearchParams = {}): Promise<AggregatedBook[]> {
+    // Build query string from params
+    const queryParams = new URLSearchParams();
+
+    if (params.query) queryParams.append('query', params.query);
+    if (params.category) queryParams.append('category', params.category);
+    if (params.sortBy) queryParams.append('sortBy', params.sortBy);
+    if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder);
+    if (params.page) queryParams.append('page', params.page.toString());
+    if (params.limit) queryParams.append('limit', params.limit.toString());
+
+    const queryString = queryParams.toString();
+    const url = `${API_URL}/api/v1/books/aggregated${queryString ? `?${queryString}` : ''}`;
+
+    const response = await fetch(url, {
+      next: {
+        revalidate: 60,
+        tags: ['books'],
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch aggregated books');
+    }
+
+    return response.json();
+  },
+
+  async getAggregatedBookById(id: number): Promise<{ success: boolean; book: AggregatedBook }> {
+    const response = await fetch(`${API_URL}/api/v1/books/aggregated/${id}`);
+    console.log(`${API_URL}/api/v1/books/aggregated/${id}`)
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch aggregated book');
     }
 
     return response.json();
