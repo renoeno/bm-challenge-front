@@ -41,7 +41,9 @@ export const bookService = {
     return response.json();
   },
 
-  async getAggregatedBooks(params: BookSearchParams = {}): Promise<AggregatedBook[]> {
+  async getAggregatedBooks(
+    params: BookSearchParams = {},
+  ): Promise<AggregatedBook[]> {
     // Build query string from params
     const queryParams = new URLSearchParams();
 
@@ -69,9 +71,11 @@ export const bookService = {
     return response.json();
   },
 
-  async getAggregatedBookById(id: number): Promise<{ success: boolean; book: AggregatedBook }> {
+  async getAggregatedBookById(
+    id: number,
+  ): Promise<{ success: boolean; book: AggregatedBook }> {
     const response = await fetch(`${API_URL}/api/v1/books/aggregated/${id}`);
-    console.log(`${API_URL}/api/v1/books/aggregated/${id}`)
+    console.log(`${API_URL}/api/v1/books/aggregated/${id}`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch aggregated book');

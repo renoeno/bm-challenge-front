@@ -1,19 +1,40 @@
-'use client'
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function BookColors() {
-    const [color, setColor] = useState<string | null>('Cinza');
+  const [color, setColor] = useState<string | null>('Branco');
 
-    return (
-        <div>
-            <p><span className="font-bold">Cor: </span>{color}</p>
-            <div className="flex gap-2">
-            <div className="w-[28px] h-[28px] rounded-full bg-custom-secondary-gray" onClick={() => setColor('Cinza')}></div>
-            <div className="w-[28px] h-[28px] rounded-full bg-custom-tertiary-gray" onClick={() => setColor('Cinza Escuro')}></div>
-            <div className="w-[28px] h-[28px] rounded-full bg-custom-main-gray" onClick={() => setColor('Cinza Claro')}></div>
-            <div className="w-[28px] h-[28px] rounded-full bg-custom-main-green" onClick={() => setColor('Verde')}></div>
-        </div>
-        </div>
-    );
+  const colors = [
+    { name: 'Branco', bgClass: 'bg-white' },
+    { name: 'Cinza Escuro', bgClass: 'bg-custom-tertiary-gray' },
+    { name: 'Cinza Claro', bgClass: 'bg-custom-main-gray' },
+    { name: 'Verde', bgClass: 'bg-custom-main-green' },
+  ];
+
+  return (
+    <div>
+      <p>
+        <span className="font-bold">Cor: </span>
+        {color}
+      </p>
+      <div className="flex gap-2 mt-2">
+        {colors.map((item) => (
+          <div
+            key={item.name}
+            className={`relative cursor-pointer w-[28px] h-[28px] rounded-full flex items-center justify-center
+                            ${color === item.name ? 'ring-2 ring-black' : ''}
+                        `}
+            onClick={() => setColor(item.name)}
+          >
+            <div
+              className={`w-full h-full rounded-full ${item.bgClass} 
+                            ${color === item.name ? 'border-2 border-white' : ''}
+                        `}
+            ></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

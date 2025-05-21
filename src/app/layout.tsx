@@ -1,8 +1,10 @@
 'use client';
+import CartButton from '@/components/Cart/CartButton';
 import './globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import { Provider } from '@/components/ui/provider';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { CartProvider } from '@/contexts/CartContext';
 import { usePathname } from 'next/navigation';
 
 function NavbarWrapper() {
@@ -28,7 +30,10 @@ export default function RootLayout({
       <body className=" bg-[#F6F7F9] flex font-dm-sans">
         <AuthProvider>
           <Provider>
-            <NavbarWrapper /> {children}
+            <CartProvider>
+              <NavbarWrapper /> {children}
+              <CartButton />
+            </CartProvider>
           </Provider>
         </AuthProvider>
       </body>
