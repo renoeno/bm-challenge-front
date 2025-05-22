@@ -84,8 +84,23 @@ export default function CreateBookPage() {
     }
 
     try {
-      // TODO: Implement book creation logic here
-      router.push('/books');
+     const response = await fetch('/api/books', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          stock: parseInt(formData.stock),
+          categories: formData.categories.split(',').map(cat => cat.trim()),
+        }),
+      })
+      
+      if(response.status !== 201) {
+        const errorData = await response.json();
+        setFormError(errorData);
+      }
+
     } catch (err) {
       if (err instanceof Error) {
         setFormError(err.message);

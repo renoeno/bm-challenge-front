@@ -53,30 +53,47 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  /* useEffect(() => {
+  useEffect(() => {
     const checkLoggedIn = async () => {
       try {
-        const response = await fetch('/api/auth/me');
+        // Get the access token from localStorage
+        const accessToken = localStorage.getItem('accessToken');
         
+        const response = await fetch('/api/auth/me', {
+          headers: {
+            Authorization: accessToken ? `Bearer ${accessToken}` : '',
+          },
+        });
+
         if (response.ok) {
           const userData = await response.json();
-          setUser(userData);
-        } else {
-
-          if (response.status === 401) {
-
+          const newAccessToken = response.headers.get('Authorization')?.split(' ')[1];
+          
+          // Store the new access token
+          if (newAccessToken) {
+            localStorage.setItem('accessToken', newAccessToken);
           }
+          
+          setUser({
+            ...userData,
+            accessToken: newAccessToken,
+          });
+        } else {
+          setUser(null);
+          localStorage.removeItem('accessToken');
         }
       } catch (err) {
         console.error('Authentication error:', err);
         setError('Failed to fetch user data');
+        setUser(null);
+        localStorage.removeItem('accessToken');
       } finally {
         setLoading(false);
       }
     };
     
     checkLoggedIn();
-  }, []); */
+  }, []);
 
   const signup = async (credentials: {
     name: string;
@@ -124,7 +141,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = async (credentials: LoginCredentials): Promise<User> => {
     setLoading(true);
     setError(null);
-
+  
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -133,19 +150,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         },
         body: JSON.stringify(credentials),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Login failed');
       }
-
+  
       const userData: User = await response.json();
       const accessToken = response.headers.get('Authorization')?.split(' ')[1];
-
+  
+      // Store the access token
+      if (accessToken) {
+        localStorage.setItem('accessToken', accessToken);
+      }
+  
       setUser({
         ...userData,
         accessToken,
       });
+      
       router.refresh();
       return userData;
     } catch (err) {
@@ -166,6 +189,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         method: 'POST',
       });
       setUser(null);
+      localStorage.removeItem('accessToken');
       router.refresh();
       router.push('/');
     } catch (err) {

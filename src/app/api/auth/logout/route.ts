@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function POST() {
   const cookieStore = await cookies();
   cookieStore.set({
-    name: 'auth-token',
+    name: 'refreshToken',
     value: '',
     expires: new Date(0),
     path: '/',

@@ -5,17 +5,17 @@ const protectedRoutes = ['/account'];
 const publicRoutes = ['/login', '/signup', '/'];
 
 export async function middleware(request: NextRequest) {
-  const authToken = request.cookies.get('auth-token')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
 
   const path = request.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
 
-  if (isProtectedRoute && !authToken) {
+  if (isProtectedRoute && !refreshToken) {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
 
   if (
-    authToken &&
+    refreshToken &&
     (request.nextUrl.pathname === '/login' ||
       request.nextUrl.pathname === '/signup')
   ) {

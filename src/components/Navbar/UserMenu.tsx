@@ -28,18 +28,18 @@ export default function UserMenu() {
           <Menu.Content>
             {isAdmin ? (
               <Menu.Item
-                value="new-win-a"
+                value="insert-book-a"
                 onClick={handleRedirectToBookCreation}
               >
                 Inserir livro
               </Menu.Item>
             ) : (
-              <Menu.Item value="new-txt-a" className="font-dm-sans">
+              <Menu.Item value="orders-a" className="font-dm-sans">
                 Pedidos
               </Menu.Item>
             )}
-            <Menu.Item value="new-file-a">Conta</Menu.Item>
-            <Menu.Item value="new-win-a" onClick={handleLogout}>
+            <Menu.Item value="account-a">Conta</Menu.Item>
+            <Menu.Item value="logout-a" onClick={handleLogout}>
               Logout
             </Menu.Item>
           </Menu.Content>
