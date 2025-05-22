@@ -4,7 +4,7 @@ import CategoryHero from '@/components/Filters/CategoryHero';
 import Filter from '@/components/Filters/Filter';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import { bookService } from '@/services/bookService';
-import { Book } from '@/types/types';
+import { AggregatedBook, Book } from '@/types/types';
 
 interface SearchParams {
   category?: string;
@@ -28,13 +28,13 @@ export default async function Home({
     selectedCategory = 'Todos';
   }
 
-  const allBooks = await bookService.getBooks();
+  const allBooks = await bookService.getAggregatedBooks();
   const allCategories = [
-    ...new Set(allBooks.map((book: Book) => book.category).flat()),
+    ...new Set(allBooks.map((book: AggregatedBook) => book.category).flat()),
   ];
   allCategories.unshift('Todos');
 
-  const bookData = await bookService.getBooks({
+  const bookData = await bookService.getAggregatedBooks({
     category: selectedCategory !== 'Todos' ? selectedCategory : undefined,
     query: searchQuery || undefined,
   });
@@ -72,7 +72,7 @@ export default async function Home({
       </div>
       <div className="mt-4">
         <div className="flex flex-wrap gap-4">
-          {bookData.map((book: Book) => (
+          {bookData.map((book: AggregatedBook) => (
             <BookItem key={book.id} book={book} />
           ))}
         </div>

@@ -1,13 +1,14 @@
 'use client';
 
-import { Book } from '@/types/types';
+import { AggregatedBook, Book } from '@/types/types';
 import { useRouter } from 'next/navigation';
 
-export default function BookItem({ book }: { book: Book }) {
+export default function BookItem({ book }: { book: AggregatedBook }) {
   const router = useRouter();
   const handleRedirectToBookPage = () => {
     router.push(`/books/${book.id}`);
   };
+  const price = book.variants[0].price;
   return (
     <div
       className="w-[214px] h-[331px] flex flex-col justify-between cursor-pointer"
@@ -19,7 +20,7 @@ export default function BookItem({ book }: { book: Book }) {
           {book.title}, {book.author}
         </p>
         <p className="mt-2 text-custom-text font-bold text-[16px] leading-[1]">
-          R$ {book.price}
+          R$ {price}
         </p>
       </div>
     </div>

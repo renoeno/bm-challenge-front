@@ -54,7 +54,7 @@ export default function Navbar() {
     <nav className="w-[244px] bg-white flex flex-col fixed top-0 left-0 h-screen overflow-hidden">
       <div className="flex flex-col justify-between h-full overflow-y-auto">
         <div>
-          <div className="p-4 pb-3 sticky top-0 bg-white z-10">
+          <div className="p-4 pb-3 sticky top-0 bg-white z-10 cursor-pointer" onClick={() => handleRedirect('/')}>
             <Logo />
           </div>
           <hr />
