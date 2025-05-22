@@ -1,6 +1,7 @@
 import BookActions from '@/components/Book/BookActions';
 import { bookService } from '@/services/bookService';
 import { Breadcrumb } from '@chakra-ui/react';
+import Image from 'next/image';
 
 interface BookPageProps {
   id: string;
@@ -50,7 +51,15 @@ export default async function BookPage({ params }: { params: BookPageProps }) {
         </Breadcrumb.Root>
       </div>
       <div className="mt-6 flex gap-10">
-        <div className="w-[473px] h-[584px] rounded-[12px] bg-custom-main-gray book.price flex-1"></div>
+        <div className="w-[473px] h-[584px] rounded-[12px] bg-[#F2F2F2] flex-1 flex justify-center items-center">
+          
+      <Image
+              src={book.image}
+              alt={`Capa do livro ${book.title}`}
+              width={312}
+              height={488}
+            />
+        </div>
         <div className="flex-1 min-w-0">
           <p className="text-custom-text text-[38px] font-bold">
             {book.title}, <span className="uppercase">{book.author}</span>
