@@ -1,13 +1,15 @@
 'use client';
 
-import { CloseButton, Dialog, Portal } from '@chakra-ui/react';
+import { Dialog, Portal } from '@chakra-ui/react';
 import Button from '../Button/Button';
 import { useCart } from '@/contexts/CartContext';
 import Image from 'next/image';
-import { Trash2, X, ShoppingBag } from 'feather-icons-react';
+import { X, ShoppingBag } from 'feather-icons-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Quantity from '../Quantity/Quantity';
+import { orderService } from '@/services/orderService';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -15,14 +17,18 @@ interface CartModalProps {
 }
 
 export default function CartModal({ isOpen, onClose }: CartModalProps) {
-  const { items, removeItem, updateItemQuantity, getTotalPrice } = useCart();
+  const { items, removeItem, updateItemQuantity, getTotalPrice, clearCart } = useCart();
+  const { user } = useAuth();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [submiting, setSubmiting] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Handle body scroll
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('overflow-hidden');
@@ -35,59 +41,132 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     };
   }, [isOpen]);
 
-  const handleCheckout = () => {
-    onClose();
-    router.push('/cart');
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
+    if (orderSuccess) {
+      // Auto close after 5 seconds
+      timer = setTimeout(() => {
+        setOrderSuccess(false);
+        onClose();
+        router.push('/');
+      }, 5000);
+    }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [orderSuccess, onClose, router]);
+
+  const handleCheckout = async () => {
+    try {
+      setSubmiting(true);
+
+      const total = (getTotalPrice() + 39.9).toFixed(2);
+
+      const currItems = items.map((item) => ({
+        bookId: item.id,
+        quantity: item.quantity,
+      }));
+
+      const response = await orderService.createOrder({
+        total: total,
+        items: currItems,
+      }, user?.accessToken || '');
+
+      if (!response.success) {
+        console.error('Falha ao criar pedido. Por favor, tente novamente.');
+        onClose();
+      } else {
+        
+        clearCart()
+        setOrderSuccess(true);
+      }
+
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err);
+      } else {
+        console.error('Falha ao criar pedido. Por favor, tente novamente.');
+      }
+      onClose();
+    } finally {
+      setSubmiting(false);
+    }
   };
 
   if (!mounted) {
     return null;
   }
 
-  const handleUpdateQuantity = (quantity: number) => {
-    if (quantity < 1) {
-      return;
-    }
-    updateItemQuantity(items[0].id, items[0].variant, quantity);
-  };
-
   return (
     <Dialog.Root
       lazyMount
       open={isOpen}
-      onOpenChange={(e) => e.open === false && onClose()}
+      onOpenChange={(e) => e.open === false && !orderSuccess && onClose()}
     >
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content className="rounded-[24px] w-full max-w-[485px] h-full max-h-[702px] flex flex-col">
+          <Dialog.Content className="rounded-[24px] w-full max-w-[485px] h-full max-h-[702px] flex flex-col bg-white">
             <Dialog.Header className="p-4">
               <div className="flex items-center justify-between w-full">
-                <Dialog.Title>
-                  <div className="flex items-start justify-between">
-                    <div className="border rounded-lg border-[#F2F3F6] p-2">
-                      <ShoppingBag width={17} />{' '}
-                    </div>
-                    <div className="ml-3">
-                      <p className="font-bold text-[14px] leading-[20px]">
-                        Carrinho
-                      </p>
-                      <p className="text-[12px] leading-[20px]">
-                        Certifique da sua escolha e finalize a compra
-                      </p>
-                    </div>
+                <div className="flex items-start">
+                  <div className="border rounded-lg border-[#F2F3F6] p-2">
+                    <ShoppingBag width={17} />{' '}
                   </div>
+                  <div className="ml-3">
+                    <p className="font-bold text-[14px] leading-[20px]">
+                      Carrinho
+                    </p>
+                    <p className="text-[12px] leading-[20px]">
+                      Certifique da sua escolha e finalize a compra
+                    </p>
+                  </div>
+                </div>
 
-                  <Dialog.CloseTrigger asChild className="mt-4 mr-4">
-                    <button type="button" aria-label="Close dialog">
-                      <X width={20} />
-                    </button>
-                  </Dialog.CloseTrigger>
-                </Dialog.Title>
+                <Dialog.CloseTrigger asChild>
+                  <button 
+                    type="button" 
+                    aria-label="Close dialog"
+                    disabled={orderSuccess}
+                  >
+                    <X width={20} />
+                  </button>
+                </Dialog.CloseTrigger>
               </div>
             </Dialog.Header>
             <Dialog.Body className="p-4 overflow-y-auto flex-1">
-              {items.length === 0 ? (
+              {orderSuccess ? (
+                <div className="flex items-center justify-center h-full">
+                  {/* Simple success message with custom styling */}
+                  <div className="bg-custom-main-green bg-opacity-10 text-custom-main-green rounded-lg p-6 text-center">
+                    <div className="w-16 h-16 mx-auto bg-custom-main-green bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-8 w-8 text-custom-main-green" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M5 13l4 4L19 7" 
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold">Pedido realizado com sucesso!</h3>
+                    <p className="mt-2">
+                      Seu pedido foi registrado e está sendo processado.
+                    </p>
+                    <p className="mt-4 text-sm text-opacity-70">
+                      Fechando em 5 segundos...
+                    </p>
+                  </div>
+                </div>
+              ) : items.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">Seu carrinho está vazio</p>
                 </div>
@@ -100,7 +179,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                           key={`${item.id}-${item.variant}`}
                           className="flex pb-4 gap-x-8"
                         >
-                          <div className="w-[183px] h-[226px]  relative mr-3 flex-1">
+                          <div className="w-[183px] h-[226px] relative mr-3 flex-1">
                             <div className="bg-gray-200 w-full h-full rounded-lg" />
                           </div>
 
@@ -117,7 +196,9 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                               <Quantity
                                 quantity={item.quantity}
                                 stock={10}
-                                handleUpdateQuantity={handleUpdateQuantity}
+                                handleUpdateQuantity={(qty) => 
+                                  updateItemQuantity(item.id, item.variant, qty)
+                                }
                               />
                             </div>
                           </div>
@@ -148,8 +229,9 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                         <Button
                           className="px-8 py-2 leading-[20px]"
                           onClick={handleCheckout}
+                          disabled={submiting || getTotalPrice() === 0}
                         >
-                          Finalizar Compra
+                          {submiting ? 'Processando...' : 'Finalizar Compra'}
                         </Button>
                       </div>
                     </div>

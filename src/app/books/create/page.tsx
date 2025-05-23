@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import AdminRoute from '@/components/AdminRoute/AdminRoute';
 import Button from '@/components/Button/Button';
 import { z } from 'zod';
+import { bookService } from '@/services/bookService';
+import { useAuth } from '@/contexts/AuthContext';
 
 const bookSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório').max(255, 'Título deve ter no máximo 255 caracteres'),
@@ -19,7 +21,7 @@ const bookSchema = z.object({
     .min(1, 'Estoque deve ser maior que 0')
     .max(999, 'Estoque deve ser menor que 999'),
   image: z.string().url('URL da imagem inválida').min(1, 'URL da imagem é obrigatória'),
-  categories: z.string()
+  category: z.string()
     .min(1, 'Categorias são obrigatórias')
     .refine(
       (val) => val.split(',').every(cat => cat.trim().length > 0),
@@ -35,10 +37,11 @@ type FormErrors = {
   price?: string;
   stock?: string;
   image?: string;
-  categories?: string;
+  category?: string;
 };
 
 export default function CreateBookPage() {
+  const {user} = useAuth()
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -47,10 +50,11 @@ export default function CreateBookPage() {
     price: '',
     stock: '',
     image: '',
-    categories: '',
+    category: '',
   });
   const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
   const [formError, setFormError] = useState<string>('');
+  const [submiting, setSubmiting] = useState(false)
   const router = useRouter();
 
   const validateForm = () => {
@@ -84,28 +88,29 @@ export default function CreateBookPage() {
     }
 
     try {
-     const response = await fetch('/api/books', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          stock: parseInt(formData.stock),
-          categories: formData.categories.split(',').map(cat => cat.trim()),
-        }),
-      })
-      
-      if(response.status !== 201) {
-        const errorData = await response.json();
-        setFormError(errorData);
+      setSubmiting(true)
+     const response = await bookService.createBook({
+      ...formData,
+      stock: parseInt(formData.stock),
+      category: formData.category.split(',').map(cat => cat.trim()),
+    }, user?.accessToken || '', user?.role || '');
+
+      if(!response.success) {
+        setFormError('Falha ao criar livro. Por favor, tente novamente.');
+        setSubmiting(false)
+      } else {
+        router.push('/');
+setSubmiting(false)
       }
 
     } catch (err) {
       if (err instanceof Error) {
         setFormError(err.message);
+        
+setSubmiting(false)
       } else {
         setFormError('Falha ao criar livro. Por favor, tente novamente.');
+        setSubmiting(false)
       }
     }
   };
@@ -201,24 +206,24 @@ export default function CreateBookPage() {
               </div>
 
               <div>
-                <label htmlFor="categories" className="text-sm text-custom-dark-gray">
+                <label htmlFor="category" className="text-sm text-custom-dark-gray">
                   Categorias (separadas por vírgula)
                 </label>
                 <input
-                  id="categories"
-                  name="categories"
+                  id="category"
+                  name="category"
                   type="text"
                   placeholder="Ficção, Romance, Aventura"
-                  value={formData.categories}
+                  value={formData.category}
                   onChange={handleChange}
                   className={`w-full relative block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ${
-                    fieldErrors.categories
+                    fieldErrors.category
                       ? 'ring-red-500 focus:ring-red-500'
                       : 'ring-[#AEB0B3B2] focus:ring-indigo-600'
                   }`}
                 />
-                {fieldErrors.categories && (
-                  <p className="mt-1 text-xs text-red-600">{fieldErrors.categories}</p>
+                {fieldErrors.category && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.category}</p>
                 )}
               </div>
 
@@ -238,8 +243,8 @@ export default function CreateBookPage() {
                   }`}
                 >
                   <option value="">Selecione um tipo</option>
-                  <option value="physical">Físico</option>
-                  <option value="digital">Digital</option>
+                  <option value="Físico">Físico</option>
+                  <option value="Kindle">Kindle</option>
                 </select>
                 {fieldErrors.variant && (
                   <p className="mt-1 text-xs text-red-600">{fieldErrors.variant}</p>
@@ -326,6 +331,7 @@ export default function CreateBookPage() {
                 type="submit"
                 variant="primary"
                 size="sm"
+                disabled={submiting}
               >
                 Criar Livro
               </Button>

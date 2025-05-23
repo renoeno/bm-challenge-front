@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, Portal } from '@chakra-ui/react';
 import { ChevronUp, ChevronDown } from 'feather-icons-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function UserMenu() {
@@ -33,12 +34,8 @@ export default function UserMenu() {
               >
                 Inserir livro
               </Menu.Item>
-            ) : (
-              <Menu.Item value="orders-a" className="font-dm-sans">
-                Pedidos
-              </Menu.Item>
-            )}
-            <Menu.Item value="account-a">Conta</Menu.Item>
+            ) : null}
+            <Menu.Item value="account-a"><Link href="/account">Conta</Link> </Menu.Item>
             <Menu.Item value="logout-a" onClick={handleLogout}>
               Logout
             </Menu.Item>

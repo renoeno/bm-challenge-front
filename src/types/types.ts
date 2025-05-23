@@ -14,7 +14,7 @@ export interface CreateBookRequestBody {
 }
 
 export interface CreateOrderRequestBody {
-  itens: Item[];
+  items: Item[];
   total: string;
 }
 export interface CartItem {

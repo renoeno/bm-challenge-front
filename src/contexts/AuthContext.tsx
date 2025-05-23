@@ -69,14 +69,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           const userData = await response.json();
           const newAccessToken = response.headers.get('Authorization')?.split(' ')[1];
           
-          // Store the new access token
           if (newAccessToken) {
             localStorage.setItem('accessToken', newAccessToken);
           }
-          
+
           setUser({
             ...userData,
-            accessToken: newAccessToken,
+            accessToken: newAccessToken ? newAccessToken: accessToken ,
           });
         } else {
           setUser(null);

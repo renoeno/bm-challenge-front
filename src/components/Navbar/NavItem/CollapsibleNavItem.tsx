@@ -1,4 +1,5 @@
 import { Accordion, Span } from '@chakra-ui/react';
+import Link from 'next/link';
 
 interface CollapsableNavItemProps {
   icon: React.ReactNode;
@@ -34,11 +35,11 @@ export const CollapsbleNavItem = ({
               className={`flex items-center gap-2 p-2 ml-8 mr-3 rounded-lg  group  ${disabled ? 'pointer-events-none' : 'cursor-pointer hover:bg-custom-hover'} ${selectedCategory === child ? 'bg-custom-hover' : ''}`}
               onClick={() => onClick && onClick(child)}
             >
-              <span
-                className={`"text-[14px]  group-hover:text-custom-main-yellow" ${selectedCategory === child ? 'text-custom-main-yellow' : ''}`}
-              >
-                {child}
-              </span>
+              <Link href={`/?category=${child}`}>
+                <span className="text-[14px] font-bold group-hover:text-custom-main-yellow">
+                  {child}
+                </span>
+                </Link>
             </Accordion.ItemBody>
           ))}
         </Accordion.ItemContent>

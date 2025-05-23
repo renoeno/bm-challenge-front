@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const noNavbarRoutes = ['/login', '/signup', '/account', '/books/create'];
+  const noNavbarRoutes = ['/login', '/signup', '/books/create'];
   const showNavbar = !noNavbarRoutes.includes(pathname);
 
   return (

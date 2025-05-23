@@ -69,6 +69,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     quantity: number,
   ) => {
     setItems((prevItems) => {
+      if (quantity <= 0) {
+        return prevItems.filter(
+          (item) => !(item.id === id && item.variant === variant)
+        );
+      }
+      
       return prevItems.map((item) => {
         if (item.id === id && item.variant === variant) {
           return { ...item, quantity };

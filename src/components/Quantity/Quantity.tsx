@@ -21,7 +21,7 @@ export default function Quantity({
         unstyled
         spinOnPress={false}
         max={max}
-        min={1}
+        min={0}
         onValueChange={(e) => handleUpdateQuantity(parseInt(e.value))}
       >
         <HStack gap="2">

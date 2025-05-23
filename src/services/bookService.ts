@@ -91,12 +91,23 @@ export const bookService = {
 
   async createBook(
     bookData: CreateBookRequestBody,
+    token: string,
+    userRole: string,
   ): Promise<{ success: boolean; book: Book }> {
     try {
-      const response = await adminFetch(`${API_URL}/api/v1/books`, {
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      if (userRole !== 'ADMIN') {
+        throw new Error('Admin privileges required');
+      }
+      
+      const response = await fetch(`${API_URL}/api/v1/books`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(bookData),
         cache: 'no-store',
@@ -110,7 +121,10 @@ export const bookService = {
       }
 
       const result = await response.json();
-      return result;
+      return {
+        success: true,
+        book: result.book,
+      };
     } catch (error) {
       console.error('Error creating book:', error);
       throw error;
