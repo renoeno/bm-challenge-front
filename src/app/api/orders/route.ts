@@ -1,3 +1,4 @@
+import { API_URL } from '@/config/api';
 import { Item, Order } from '@/types/types';
 import { authenticatedFetch } from '@/utils/api';
 import { cookies } from 'next/headers';
@@ -6,8 +7,6 @@ import { NextRequest, NextResponse } from 'next/server';
 interface CreateOrderRequestBody {
   itens: Item[];
 }
-
-const API_URL = 'http://localhost:3005';
 
 export async function GET(request: NextRequest) {
   try {

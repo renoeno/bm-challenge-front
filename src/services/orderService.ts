@@ -1,10 +1,9 @@
+import { API_URL } from '@/config/api';
 import {
   CreateOrderRequestBody,
   Order,
 } from '@/types/types';
 import { authenticatedFetch } from '@/utils/api';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
 
 export const orderService = {
   async getOrders(

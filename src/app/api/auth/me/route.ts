@@ -1,8 +1,7 @@
+import { API_URL } from '@/config/api';
 import { User } from '@/types/types';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-
-const API_URL = 'http://localhost:3005';
 
 export async function GET(request: NextRequest) {
   try {

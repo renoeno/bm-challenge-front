@@ -1,3 +1,4 @@
+import { API_URL } from '@/config/api';
 import {
   AggregatedBook,
   Book,
@@ -5,8 +6,6 @@ import {
   CreateBookRequestBody,
 } from '@/types/types';
 import { adminFetch, authenticatedFetch } from '@/utils/api';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
 
 export const bookService = {
   async getBooks(params: BookSearchParams = {}): Promise<Book[]> {

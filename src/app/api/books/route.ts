@@ -1,3 +1,4 @@
+import { API_URL } from '@/config/api';
 import { Book } from '@/types/types';
 import { authenticatedFetch } from '@/utils/api';
 import { cookies } from 'next/headers';
@@ -12,8 +13,6 @@ interface CreateBookRequestBody {
   image?: string;
   stock: number;
 }
-
-const API_URL = 'http://localhost:3005';
 
 export async function GET(request: NextRequest) {
   try {

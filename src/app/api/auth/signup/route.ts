@@ -1,3 +1,4 @@
+import { API_URL } from '@/config/api';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -25,8 +26,6 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-
-    const API_URL = 'http://localhost:3005';
 
     const response = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
