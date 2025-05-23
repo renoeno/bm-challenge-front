@@ -4,17 +4,10 @@ import { bookService } from '@/services/bookService';
 import { Breadcrumb } from '@chakra-ui/react';
 import Image from 'next/image';
 
-interface BookPageProps {
-  id: string;
-}
+export default async function BookPage({ params }: {  params: Promise<{ id: string }> }) {
+  const bookId = (await params).id
 
-export default async function BookPage({ params }: { params: BookPageProps }) {
-  const idParams = await new Promise<BookPageProps>((resolve) => {
-    resolve(params);
-  });
-
-  const bookId = parseInt(idParams.id);
-  const result = await bookService.getAggregatedBookById(bookId);
+  const result = await bookService.getAggregatedBookById(parseInt(bookId));
   const book = result.book;
 
   return (

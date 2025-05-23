@@ -6,12 +6,19 @@ import { useState } from 'react';
 
 export function BookVariants({
   variants,
+  handleSelectVariant,
 }: {
   variants: Variant[];
+  handleSelectVariant: (variant: Variant) => void;
 }) {
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
     variants[0],
   );
+
+  const handleChangeVariant = (variant: Variant) => {
+    setSelectedVariant(variant);
+    handleSelectVariant(variant);
+  };
 
   return (
     <div>
@@ -27,7 +34,7 @@ export function BookVariants({
             }
             size="sm"
             className={`"w-full" ${selectedVariant?.id === variant.id ? 'uppercase' : ''}`}
-            onClick={() => setSelectedVariant(variant)}
+            onClick={() => handleChangeVariant(variant)}
           >
             {variant.variant}
           </Button>

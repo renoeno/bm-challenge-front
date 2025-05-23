@@ -6,23 +6,16 @@ import SearchBar from '@/components/SearchBar/SearchBar';
 import { bookService } from '@/services/bookService';
 import { AggregatedBook } from '@/types/types';
 
-interface SearchParams {
-  category?: string;
-  query?: string;
-  [key: string]: string | string[] | undefined;
-}
 
 export default async function Home({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<{ category?: string;
+    query?: string; }>
 }) {
-  const params = await new Promise<SearchParams>((resolve) => {
-    resolve(searchParams);
-  });
 
-  let selectedCategory = params.category as string | undefined;
-  const searchQuery = params.query || '';
+  let selectedCategory = (await searchParams).category
+  const searchQuery = (await searchParams).query
 
   if (!selectedCategory) {
     selectedCategory = 'Todos';
