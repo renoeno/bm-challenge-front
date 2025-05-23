@@ -80,5 +80,6 @@ export interface User {
   name: string;
   email: string;
   role: 'ADMIN' | 'USER';
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined;
+
 }

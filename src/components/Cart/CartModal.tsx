@@ -3,7 +3,6 @@
 import { Dialog, Portal } from '@chakra-ui/react';
 import Button from '../Button/Button';
 import { useCart } from '@/contexts/CartContext';
-import Image from 'next/image';
 import { X, ShoppingBag } from 'feather-icons-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -17,7 +16,7 @@ interface CartModalProps {
 }
 
 export default function CartModal({ isOpen, onClose }: CartModalProps) {
-  const { items, removeItem, updateItemQuantity, getTotalPrice, clearCart } = useCart();
+  const { items, updateItemQuantity, getTotalPrice, clearCart } = useCart();
   const { user } = useAuth();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);

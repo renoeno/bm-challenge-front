@@ -44,12 +44,6 @@ export default function Navbar() {
     router.push(`/?${params.toString()}`);
   };
 
-  const handleRedirect = (path: string) => {
-    const params = new URLSearchParams();
-    params.set('category', '');
-    router.push(path);
-  };
-
   return (
     <nav className="w-[244px] bg-white flex flex-col fixed top-0 left-0 h-screen overflow-hidden">
       <div className="flex flex-col justify-between h-full overflow-y-auto">

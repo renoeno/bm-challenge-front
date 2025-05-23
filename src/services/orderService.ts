@@ -3,7 +3,6 @@ import {
   CreateOrderRequestBody,
   Order,
 } from '@/types/types';
-import { authenticatedFetch } from '@/utils/api';
 
 export const orderService = {
   async getOrders(
@@ -36,16 +35,6 @@ export const orderService = {
       orders: result || [],
     };
 
-  },
-
-  async getOrderById(id: number): Promise<{ success: boolean; order: Order }> {
-    const response = await authenticatedFetch(`${API_URL}/api/v1/orders/${id}`);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch order');
-    }
-
-    return response.json();
   },
 
   async createOrder(

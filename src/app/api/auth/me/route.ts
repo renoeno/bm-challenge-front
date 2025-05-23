@@ -1,5 +1,4 @@
 import { API_URL } from '@/config/api';
-import { User } from '@/types/types';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 

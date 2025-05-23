@@ -1,6 +1,6 @@
 'use client';
 
-import { AggregatedBook, Book } from '@/types/types';
+import { AggregatedBook } from '@/types/types';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 

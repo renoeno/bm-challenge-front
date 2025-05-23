@@ -1,7 +1,5 @@
 import { API_URL } from '@/config/api';
 import { Book } from '@/types/types';
-import { authenticatedFetch } from '@/utils/api';
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface CreateBookRequestBody {
@@ -14,7 +12,7 @@ interface CreateBookRequestBody {
   stock: number;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const response = await fetch(`${API_URL}/api/v1/books`);
 
@@ -39,7 +37,6 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body: CreateBookRequestBody = await request.json();
-    const cookieStore = await cookies();
 
     if (
       !body.title ||

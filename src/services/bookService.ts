@@ -5,7 +5,6 @@ import {
   BookSearchParams,
   CreateBookRequestBody,
 } from '@/types/types';
-import { adminFetch, authenticatedFetch } from '@/utils/api';
 
 export const bookService = {
   async getBooks(params: BookSearchParams = {}): Promise<Book[]> {

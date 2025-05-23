@@ -48,7 +48,7 @@ export default function Button({
   return (
     <button
       className={cn(
-        buttonVariants({ variant, size, isDisabled: disabled }),
+        buttonVariants({ variant, size, isDisabled: disabled || isDisabled }),
         className,
       )}
       {...props}

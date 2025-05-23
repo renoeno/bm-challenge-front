@@ -6,10 +6,8 @@ import { useState } from 'react';
 
 export function BookVariants({
   variants,
-  handleSelectVariant,
 }: {
   variants: Variant[];
-  handleSelectVariant: (variant: Variant) => void;
 }) {
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
     variants[0],

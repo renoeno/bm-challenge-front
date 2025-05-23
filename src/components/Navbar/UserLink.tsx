@@ -4,7 +4,7 @@ import UserMenu from './UserMenu';
 import { useRouter } from 'next/navigation';
 
 export default function UserLink() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
 
   const handleRedirectToLogin = () => {

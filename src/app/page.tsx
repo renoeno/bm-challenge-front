@@ -4,7 +4,7 @@ import CategoryHero from '@/components/Filters/CategoryHero';
 import Filter from '@/components/Filters/Filter';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import { bookService } from '@/services/bookService';
-import { AggregatedBook, Book } from '@/types/types';
+import { AggregatedBook } from '@/types/types';
 
 interface SearchParams {
   category?: string;

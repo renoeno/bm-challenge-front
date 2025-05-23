@@ -1,8 +1,6 @@
-import { cookies } from 'next/headers';
 import { NextResponse, NextRequest } from 'next/server';
 
 const protectedRoutes = ['/account'];
-const publicRoutes = ['/login', '/signup', '/'];
 
 export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get('refreshToken')?.value;

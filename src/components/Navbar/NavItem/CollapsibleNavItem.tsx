@@ -1,4 +1,4 @@
-import { Accordion, Span } from '@chakra-ui/react';
+import { Accordion } from '@chakra-ui/react';
 import Link from 'next/link';
 
 interface CollapsableNavItemProps {

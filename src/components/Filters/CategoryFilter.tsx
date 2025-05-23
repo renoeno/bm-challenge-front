@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Tag from '../Tag/Tag';
 import { useRouter, usePathname } from 'next/navigation';
 
